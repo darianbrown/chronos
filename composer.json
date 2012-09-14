@@ -1,6 +1,6 @@
 {
     "name": "chronos/chronos",
-    "description": "Simple data and time abstraction layer",
+    "description": "Simple date and time abstraction layer",
     "require": {
         "php": ">=5.0"
     },
