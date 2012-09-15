@@ -1,8 +1,13 @@
 # Chronos
 
-Chronos is a simple date and time abstraction layer used to dimpify and standardise dates and times within a project
+Chronos is a simple abstraction layer for PHP's date and time functions with the aim of standardising using dates and times within an application.
 
-## Sub heading
+## Usage
+```php
+<?php
+
+// TODO
+````
 
 ### sub sub heading
 

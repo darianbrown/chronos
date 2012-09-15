@@ -1,6 +1,6 @@
 <?php
 
-namespace Chronos;
+namespace Succinct\Chronos;
 
 class Chronos {
 	
