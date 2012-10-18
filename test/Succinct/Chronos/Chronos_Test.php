@@ -11,6 +11,26 @@ class Chronos_Test extends PHPUnit_Framework_TestCase {
 		$this->chronos = new Chronos('2010-09-08 17:16:15');
 	}
 
+	public function testInit() {
+		$chronos = new Chronos(1347690188);
+		$this->assertSame($chronos->timestamp(), 1347690188);
+	}
+
+	public function testToday() {
+		$chronos = Chronos::today();
+		$this->assertSame($chronos->ymd(), date('Y-m-d'));
+	}
+
+	public function testTomorrow() {
+		$chronos = Chronos::tomorrow();
+		$this->assertSame($chronos->ymd(), date('Y-m-d', strtotime('+1 day')));
+	}
+
+	public function testYesterday() {
+		$chronos = Chronos::yesterday();
+		$this->assertSame($chronos->ymd(), date('Y-m-d', strtotime('-1 day')));
+	}
+
 	/**
 	 * @dataProvider ymd_data
 	 */
