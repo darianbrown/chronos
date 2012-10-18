@@ -19,7 +19,15 @@ $chronos = Chronos::tomorrow();
 // create a Chronos instance with date reference of today
 $chronos = Chronos::today();
 
+// create a Chronos instance with the current time
 $chronos = new Chronos();
+
+// create a Chronos instance with the following timestamp
+$chronos = new Chronos(1347690188);
+
+// create a Chronos instance matching the date string (any valid date string works)
+$chronos = new Chronos('-3 weeks -1 day +2 hours');
+
 ````
 
 ### Displaying a date
@@ -34,5 +42,8 @@ echo $chronos->ymd('/') . PHP_EOL;
 
 // displays current unix timestamp (e.g. 1347690188)
 echo $chronos->timestamp() . PHP_EOL;
+
+// display the current day (e.g. Tue)
+echo $chronos->day() . PHP_EOL
 
 ```

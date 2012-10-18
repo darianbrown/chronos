@@ -10,9 +10,18 @@ class Chronos {
 		$this->timestamp = $this->resolve($date);
 	}
 
-	/**
-	 * @returns int
-	 */
+	static public function today() {
+		return new self();
+	}
+
+	static public function tomorrow() {
+		return new self('+1 day');
+	}
+
+	static public function yesterday() {
+		return new self('-1 day');
+	}
+
 	public function timestamp() {
 		return $this->timestamp;
 	}
@@ -33,16 +42,22 @@ class Chronos {
 		return date('D', $this->timestamp);
 	}
 
-	static public function today() {
-		return new self();
+	/**
+	 * Get day of year
+	 */
+	public function doy() {
+		return date('z', $this->datetime);
 	}
 
-	static public function tomorrow() {
-		return new self('+1 day');
+	/**
+	 * Get day of week
+	 */
+	public function dow() {
+		return $this->format('w');
 	}
 
-	static public function yesterday() {
-		return new self('-1 day');
+	public function get_week() {
+		return $this->format('W');
 	}
 
 	/**
@@ -111,6 +126,8 @@ class Chronos {
 			return $date->timestamp();
 		} else if ($date === NULL) {
 			return time();
+		} else if ($date === (int) $date) {
+			return $date;
 		}
 
 		throw new \InvalidArgumentException('Expected an instance of Chronos or a date string. Received: ' . $date);
