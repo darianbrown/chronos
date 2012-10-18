@@ -18,7 +18,19 @@ class Chronos {
 	}
 
 	public function ymd($delimiter='-') {
+		$delimiter = $delimiter === NULL ? '-' : $delimiter;
 		return date('Y' . $delimiter . 'm' . $delimiter . 'd', $this->timestamp);
+	}
+
+	// TODO: Add 24/12 hour output
+	public function his($delimiter=':') {
+		$delimiter = $delimiter === NULL ? ':' : $delimiter;
+		return date('H' . $delimiter . 'i' . $delimiter . 's', $this->timestamp);
+	}
+
+	// TODO: long and short (Wed and Wednesday)
+	public function day() {
+		return date('D', $this->timestamp);
 	}
 
 	static public function today() {
