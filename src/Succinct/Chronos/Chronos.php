@@ -5,7 +5,7 @@ namespace Succinct\Chronos;
 class Chronos {
 
 	protected $date = NULL;
-	
+
 	public function __construct($date=NULL) {
 		$this->timestamp = $this->resolve($date);
 	}
@@ -67,7 +67,7 @@ class Chronos {
 
 		// figure out how many seconds the date is from now
 		$seconds = time() - $this->timestamp;
-		
+
 		// in the future
 		if( $seconds < 0 ) {
 			$f = ($seconds*-1) . " seconds from now";
@@ -120,12 +120,12 @@ class Chronos {
 	}
 
 	protected function resolve($date) {
-		if ($result = @strtotime($date)) {
-			return $result;
+		if ($date === NULL) {
+			return time();
 		} else if ($date instanceof Chronos) {
 			return $date->timestamp();
-		} else if ($date === NULL) {
-			return time();
+		} else if ($result = @strtotime($date)) {
+			return $result;
 		} else if ($date === (int) $date) {
 			return $date;
 		}
