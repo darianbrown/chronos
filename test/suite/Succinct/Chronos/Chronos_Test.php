@@ -1,40 +1,60 @@
 <?php
 
-use Succinct\Chronos\Chronos;
+namespace Succinct\Chronos;
 
-class Chronos_Test extends PHPUnit_Framework_TestCase {
+use PHPUnit_Framework_TestCase;
+
+class Chronos_Test extends PHPUnit_Framework_TestCase
+{
 
 	protected $chronos = NULL;
 
-	protected function setUp() {
+	protected function setUp()
+	{
 		parent::setUp();
+
 		$this->chronos = new Chronos('2010-09-08 17:16:15');
 	}
 
-	public function testInit() {
-		$chronos = new Chronos(1347690188);
-		$this->assertSame($chronos->timestamp(), 1347690188);
+	public function testConstructor()
+	{
+		// TODO: Test contstructor by passing time string, chronos object and unixtimestamp
+		$chronos = new Chronos();
+
+		$this->assertInstanceOf(__NAMESPACE__ . "\Chronos", $chronos);
 	}
 
-	public function testToday() {
+	public function testToday()
+	{
 		$chronos = Chronos::today();
 		$this->assertSame($chronos->ymd(), date('Y-m-d'));
 	}
 
-	public function testTomorrow() {
+	public function testTomorrow()
+	{
 		$chronos = Chronos::tomorrow();
 		$this->assertSame($chronos->ymd(), date('Y-m-d', strtotime('+1 day')));
 	}
 
-	public function testYesterday() {
+	public function testYesterday()
+	{
 		$chronos = Chronos::yesterday();
 		$this->assertSame($chronos->ymd(), date('Y-m-d', strtotime('-1 day')));
+	}
+
+	public function testTimestamp()
+	{
+		$timestamp = strtotime('2010-09-08 17:16:15');
+		$chronos = new Chronos('2010-09-08 17:16:15');
+
+		$this->assertSame($timestamp, $chronos->timestamp());
 	}
 
 	/**
 	 * @dataProvider ymd_data
 	 */
-	public function testYmd($delimiter, $expected) {
+	public function testYmd($delimiter, $expected)
+	{
 		$date = $this->chronos->ymd($delimiter);
 		$this->assertSame($date, $expected);
 	}
@@ -42,18 +62,21 @@ class Chronos_Test extends PHPUnit_Framework_TestCase {
 	/**
 	 * @dataProvider his_data
 	 */
-	public function testHis($delimiter, $expected) {
+	public function testHis($delimiter, $expected)
+	{
 		$date = $this->chronos->his($delimiter);
 		$this->assertSame($date, $expected);
 	}
 
-	public function testDay() {
+	public function testDay()
+	{
 		$date = $this->chronos->day();
 		$this->assertSame($date, 'Wed');
 	}
 
 
-	public function ymd_data() {
+	public function ymd_data()
+	{
 		return array(
 			array(NULL, '2010-09-08')
 			, array('-', '2010-09-08')
@@ -64,7 +87,8 @@ class Chronos_Test extends PHPUnit_Framework_TestCase {
 	}
 
 
-	public function his_data() {
+	public function his_data()
+	{
 		return array(
 			array(NULL, '17:16:15')
 			, array('-', '17-16-15')
