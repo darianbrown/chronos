@@ -3,6 +3,7 @@
 namespace Succinct\Chronos;
 
 use PHPUnit_Framework_TestCase;
+use InvalidArgumentException;
 
 class Chronos_Test extends PHPUnit_Framework_TestCase
 {
@@ -16,30 +17,75 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         $this->chronos = new Chronos('2010-09-08 17:16:15');
     }
 
-    public function testConstructor()
+    public function constructorData()
     {
-        // TODO: Test contstructor by passing time string, chronos object and unixtimestamp
-        $chronos = new Chronos();
+        return array(
+            'Null'                    => array(null),
+            'Date String'             => array('2010-09-08 17:16:15'),
+            'Unix timestamp'          => array(1234567890),
+            'Unix string timestamp'   => array('1234567890'),
+            'Chronos instance'        => array(Chronos::now()),
+        );
+    }
+    /**
+     * @dataProvider constructorData
+     */
+    public function testConstructor($date)
+    {
+        $chronos = new Chronos($date);
 
         $this->assertInstanceOf(__NAMESPACE__ . "\Chronos", $chronos);
+    }
+
+    public function constructorFailureData()
+    {
+        return array(
+            'False'                 => array(false),
+            'True'                  => array(true),
+            'Empty string'          => array(''),
+            'Object'                => array((object) array('foo', 'bar', 'baz')),
+            'Array'                 => array(array('1234567890')),
+            'stdClass'				=> array(new \stdClass),
+            'Exception'				=> array(new \Exception),
+            'Invalid date string'   => array('foo')
+        );
+    }
+    /**
+     * @dataProvider constructorFailureData
+     */
+    public function testConstructorFailure($date)
+    {
+        $this->setExpectedException('InvalidArgumentException');
+
+        $chronos = new Chronos($date);
     }
 
     public function testToday()
     {
         $chronos = Chronos::today();
-        $this->assertSame($chronos->ymd(), date('Y-m-d'));
+
+        $this->assertSame(date('Y-m-d'), $chronos->ymd());
     }
 
     public function testTomorrow()
     {
         $chronos = Chronos::tomorrow();
-        $this->assertSame($chronos->ymd(), date('Y-m-d', strtotime('+1 day')));
+
+        $this->assertSame(date('Y-m-d', strtotime('+1 day')), $chronos->ymd());
     }
 
     public function testYesterday()
     {
         $chronos = Chronos::yesterday();
-        $this->assertSame($chronos->ymd(), date('Y-m-d', strtotime('-1 day')));
+
+        $this->assertSame(date('Y-m-d', strtotime('-1 day')), $chronos->ymd());
+    }
+
+    public function testNow()
+    {
+        $chronos = Chronos::now();
+
+        $this->assertSame(date('Y-m-d H:i:s'), $chronos->ymdhis());
     }
 
     public function testTimestamp()
@@ -48,30 +94,6 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         $chronos = new Chronos('2010-09-08 17:16:15');
 
         $this->assertSame($timestamp, $chronos->timestamp());
-    }
-
-    /**
-     * @dataProvider ymd_data
-     */
-    public function testYmd($delimiter, $expected)
-    {
-        $date = $this->chronos->ymd($delimiter);
-        $this->assertSame($date, $expected);
-    }
-
-    /**
-     * @dataProvider his_data
-     */
-    public function testHis($delimiter, $expected)
-    {
-        $date = $this->chronos->his($delimiter);
-        $this->assertSame($date, $expected);
-    }
-
-    public function testDay()
-    {
-        $date = $this->chronos->day();
-        $this->assertSame($date, 'Wed');
     }
 
     public function ymd_data()
@@ -85,6 +107,16 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @dataProvider ymd_data
+     */
+    public function testYmd($delimiter, $expected)
+    {
+        $date = $this->chronos->ymd($delimiter);
+
+        $this->assertSame($expected, $date);
+    }
+
     public function his_data()
     {
         return array(
@@ -96,4 +128,62 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @dataProvider his_data
+     */
+    public function testHis($delimiter, $expected)
+    {
+        $date = $this->chronos->his($delimiter);
+
+        $this->assertSame($expected, $date);
+    }
+
+    public function testDay()
+    {
+        $day = $this->chronos->day();
+
+        $this->assertSame('Wed', $day);
+    }
+
+    public function testDoy()
+    {
+        $doy = $this->chronos->doy();
+
+        $this->assertSame(250, $doy);
+    }
+
+    public function testDow()
+    {
+        $dow = $this->chronos->dow();
+
+        $this->assertSame(3, $dow);
+    }
+
+    public function testWeek()
+    {
+        $week = $this->chronos->week();
+
+        $this->assertSame(36, $week);
+    }
+
+    public function formatData()
+    {
+        return array(
+            'False' => array(false, ''),
+            'Null' => array(null, ''),
+            'Year' => array('Y', '2010'),
+            'Month number' => array('m', '09'),
+            'Month short string' => array('M', 'Sep'),
+            'String with hour' => array('\f\o\o: H', 'foo: 17'),
+        );
+    }
+    /**
+     * @dataProvider formatData
+     */
+    public function testFormat($format, $expectedResult)
+    {
+        $date = $this->chronos->format($format);
+
+        $this->assertSame($expectedResult, $date);
+    }
 }

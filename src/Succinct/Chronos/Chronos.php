@@ -38,7 +38,7 @@ class Chronos
     {
         $delimiter = $delimiter === NULL ? '-' : $delimiter;
 
-        return date('Y' . $delimiter . 'm' . $delimiter . 'd', $this->timestamp);
+        return $this->format('Y' . $delimiter . 'm' . $delimiter . 'd');
     }
 
     // TODO: Add 24/12 hour output
@@ -46,13 +46,18 @@ class Chronos
     {
         $delimiter = $delimiter === NULL ? ':' : $delimiter;
 
-        return date('H' . $delimiter . 'i' . $delimiter . 's', $this->timestamp);
+        return $this->format('H' . $delimiter . 'i' . $delimiter . 's');
+    }
+
+    public function ymdhis()
+    {
+        return sprintf('%s %s', $this->ymd(), $this->his());
     }
 
     // TODO: long and short (Wed and Wednesday)
     public function day()
     {
-        return date('D', $this->timestamp);
+        return $this->format('D');
     }
 
     /**
@@ -60,7 +65,7 @@ class Chronos
      */
     public function doy()
     {
-        return date('z', $this->datetime);
+        return (int) $this->format('z');
     }
 
     /**
@@ -68,12 +73,20 @@ class Chronos
      */
     public function dow()
     {
-        return $this->format('w');
+        return (int) $this->format('w');
     }
 
-    public function get_week()
+    /**
+     * Get week number
+     */
+    public function week()
     {
-        return $this->format('W');
+        return (int) $this->format('W');
+    }
+
+    public function format($dateString)
+    {
+        return date($dateString, $this->timestamp);
     }
 
     /**
@@ -81,6 +94,7 @@ class Chronos
      */
     public function ago($abbr=FALSE)
     {
+        // TODO: Fix this method
         $timestamp = $this->timestamp();
 
         // figure out how many seconds the date is from now
@@ -143,13 +157,11 @@ class Chronos
             return time();
         } elseif ($date instanceof Chronos) {
             return $date->timestamp();
-        } elseif ($result = @strtotime($date)) {
+        } elseif ((is_numeric($date) || is_string($date)) && $result = strtotime($date)) {
             return $result;
-        } elseif ($date === (int) $date) {
-            return $date;
         }
 
-        throw new \InvalidArgumentException('Expected an instance of Chronos or a date string. Received: ' . $date);
+        throw new \InvalidArgumentException('Expected an instance of Chronos or a date string.');
     }
 
     protected $timestamp = NULL;
