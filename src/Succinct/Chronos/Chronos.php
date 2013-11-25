@@ -54,6 +54,11 @@ class Chronos
         return sprintf('%s %s', $this->ymd(), $this->his());
     }
 
+    public function full()
+    {
+        return $this->format('c');
+    }
+
     // TODO: long and short (Wed and Wednesday)
     public function day()
     {
