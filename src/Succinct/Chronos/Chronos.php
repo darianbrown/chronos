@@ -164,6 +164,8 @@ class Chronos
             return $date->timestamp();
         } elseif ((is_numeric($date) || is_string($date)) && $result = strtotime($date)) {
             return $result;
+        } else if (is_object($date) && $result = strtotime($date->__toString())) {
+            return $result;
         }
 
         throw new \InvalidArgumentException('Expected an instance of Chronos or a date string.');
