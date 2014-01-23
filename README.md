@@ -2,6 +2,10 @@
 
 Chronos is a simple abstraction layer for PHP's date and time functions with the aim of standardising using dates and times within an application.
 
+## Current Build Status
+
+[![Build Status](https://travis-ci.org/darianbrown/chronos.png)](https://travis-ci.org/darianbrown/chronos)
+
 ## Usage
 
 ### Creating a new instance of Chronos
