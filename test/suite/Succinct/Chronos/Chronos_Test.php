@@ -5,6 +5,14 @@ namespace Succinct\Chronos;
 use PHPUnit_Framework_TestCase;
 use InvalidArgumentException;
 
+class ObjectToString
+{
+    public function __toString()
+    {
+        return '+1 day';
+    }
+}
+
 class Chronos_Test extends PHPUnit_Framework_TestCase
 {
 
@@ -25,6 +33,7 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
             'Unix timestamp'          => array(1234567890),
             'Unix string timestamp'   => array('1234567890'),
             'Chronos instance'        => array(Chronos::now()),
+            'Object with __toString'  => array(new ObjectToString),
         );
     }
     /**
@@ -40,14 +49,14 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
     public function constructorFailureData()
     {
         return array(
-            'False'                 => array(false),
-            'True'                  => array(true),
-            'Empty string'          => array(''),
-            'Object'                => array((object) array('foo', 'bar', 'baz')),
-            'Array'                 => array(array('1234567890')),
-            'stdClass'				=> array(new \stdClass),
-            'Exception'				=> array(new \Exception),
-            'Invalid date string'   => array('foo')
+            'False'                     => array(false),
+            'True'                      => array(true),
+            'Empty string'              => array(''),
+            'Object with no __toString' => array((object) array('foo', 'bar', 'baz')),
+            'Array'                     => array(array('1234567890')),
+            'stdClass'				    => array(new \stdClass),
+            'Exception'				    => array(new \Exception),
+            'Invalid date string'       => array('foo')
         );
     }
     /**
@@ -94,6 +103,26 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         $chronos = new Chronos('2010-09-08 17:16:15');
 
         $this->assertSame($timestamp, $chronos->timestamp());
+    }
+
+    public function agoData()
+    {
+        return array(
+            '1 second ago' => array('-1 second', 'a few moments ago'),
+            '9 second ago' => array('-9 second', 'a few moments ago'),
+            '10 seconds ago' => array('-10 second', '10 seconds ago'),
+            '59 seconds ago' => array('-59 second', '59 seconds ago'),
+            '1 minute ago' => array('-60 second', '1 minutes ago'),
+        );
+    }
+
+    /**
+     * @dataProvider agoData
+     */
+    public function testAgo($dateString, $expected)
+    {
+        $date = new Chronos($dateString);
+        $this->assertSame($expected, $date->ago());
     }
 
     public function ymd_data()

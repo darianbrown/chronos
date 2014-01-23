@@ -164,7 +164,7 @@ class Chronos
             return $date->timestamp();
         } elseif ((is_numeric($date) || is_string($date)) && $result = strtotime($date)) {
             return $result;
-        } else if (is_object($date) && $result = strtotime($date->__toString())) {
+        } else if (is_object($date) && method_exists($date, '__toString') && $result = strtotime($date . '')) {
             return $result;
         }
 
