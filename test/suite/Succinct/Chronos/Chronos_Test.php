@@ -30,6 +30,8 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         return array(
             'Null'                    => array(null),
             'Date String'             => array('2010-09-08 17:16:15'),
+            'Date String Yesterday'   => array('-1 day'),
+            'Date String Next Month'  => array('+1 month'),
             'Unix timestamp'          => array(1234567890),
             'Unix string timestamp'   => array('1234567890'),
             'Chronos instance'        => array(Chronos::now()),
@@ -97,6 +99,14 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
         $this->assertSame(date('Y-m-d H:i:s'), $chronos->ymdhis());
     }
 
+    public function testFull()
+    {
+        $chronos = new Chronos('2004-02-12T15:19:21+00:00');
+
+        date_default_timezone_set("Australia/Brisbane");
+        $this->assertSame('2004-02-13T01:19:21+10:00', $chronos->full());
+    }
+
     public function testTimestamp()
     {
         $timestamp = strtotime('2010-09-08 17:16:15');
@@ -121,7 +131,11 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
             '2 hour ago' => array('-7300 second', '2 hours ago'),
             '23 hours ago' => array('-86399 second', '23 hours ago'),
             'yesterday' => array('-86400 second', 'Yesterday'),
+            'yesterday' => array('-1 day', 'Yesterday'),
+            '5 March 2013' => array('2013-03-05', '5 March 2013'),
             '10 December 2013' => array('2013-12-10', '10 December 2013'),
+            '1 January' => array('1 Jan', '1 January'),
+            'few days ago' => array('-2 days', date('l',strtotime('-2 days'))),
         );
     }
 

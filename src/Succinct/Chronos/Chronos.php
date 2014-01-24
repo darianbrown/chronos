@@ -144,11 +144,11 @@ class Chronos
             else {
                 // now if the date is in a previous year, we add the year to the end
                 if ( date('Y') != date('Y',$timestamp) ) {
-                    $f = date('d F Y',$timestamp);
+                    $f = date('j F Y',$timestamp);
                 }
                 // else return the date without the year
                 else {
-                    $f = date('d F',$timestamp);
+                    $f = date('j F',$timestamp);
                 }
             }
         }
