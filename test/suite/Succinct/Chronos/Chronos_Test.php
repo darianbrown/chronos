@@ -108,11 +108,20 @@ class Chronos_Test extends PHPUnit_Framework_TestCase
     public function agoData()
     {
         return array(
+            'a few seconds from now' => array('11 second', '11 seconds from now'),
             '1 second ago' => array('-1 second', 'a few moments ago'),
             '9 second ago' => array('-9 second', 'a few moments ago'),
             '10 seconds ago' => array('-10 second', '10 seconds ago'),
             '59 seconds ago' => array('-59 second', '59 seconds ago'),
             '1 minute ago' => array('-60 second', '1 minutes ago'),
+            '1 minute ago' => array('-119 second', '1 minutes ago'),
+            '2 minute2 ago' => array('-139 second', '2 minutes ago'),
+            '59 minute ago' => array('-3599 second', '59 minutes ago'),
+            '1 hour ago' => array('-3600 second', '1 hours ago'),
+            '2 hour ago' => array('-7300 second', '2 hours ago'),
+            '23 hours ago' => array('-86399 second', '23 hours ago'),
+            'yesterday' => array('-86400 second', 'Yesterday'),
+            '10 December 2013' => array('2013-12-10', '10 December 2013'),
         );
     }
 
