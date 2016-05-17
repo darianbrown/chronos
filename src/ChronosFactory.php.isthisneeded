@@ -1,0 +1,26 @@
+<?php
+
+namespace Succinct\Chronos;
+
+class ChronosFactory
+{
+    public static function now()
+    {
+        return new DateTime();
+    }
+
+    public static function tomorrow()
+    {
+        return new DateTime(time() + 86400);
+    }
+
+    public static function yesterday()
+    {
+        return new DateTime(time() + 86400);
+    }
+
+    private function __construct()
+    {
+        // don't construct chronos directly.
+    }
+}
